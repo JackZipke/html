@@ -15,7 +15,7 @@
         .highcharts-figure,
         .highcharts-data-table table {
             min-width: 310px;
-            max-width: 800px;
+            max-width: 120%;
             margin: 1em auto;
         }
         
@@ -64,11 +64,14 @@
     <figure class="highcharts-figure">
     <div id="container"></div>
     <p class="highcharts-description">
-        A demo.
+        Strom zuhause heute
     </p>
     </figure>
 
     <script>
+        
+        var series = {{ series | tojson }};
+        console.log(series);
 
         Highcharts.chart('container', {
             chart: {
@@ -89,7 +92,7 @@
             },
             yAxis: {
                 title: {
-                text: 'Billions'
+                text: 'Watt [W]'
                 },
                 labels: {
                 formatter: function () {
@@ -99,7 +102,7 @@
             },
             tooltip: {
                 split: true,
-                valueSuffix: ' millions'
+                valueSuffix: ' W'
             },
             plotOptions: {
                 area: {
@@ -112,22 +115,7 @@
                 }
                 }
             },
-            series: [{
-                name: 'Asia',
-                data: [502, 635, 809, 947, 1402, 3634, 5268]
-            }, {
-                name: 'Africa',
-                data: [106, 107, 111, 133, 221, 767, 1766]
-            }, {
-                name: 'Europe',
-                data: [163, 203, 276, 408, 547, 729, 628]
-            }, {
-                name: 'America',
-                data: [18, 31, 54, 156, 339, 818, 1201]
-            }, {
-                name: 'Oceania',
-                data: [2, 2, 2, 6, 13, 30, 46]
-            }]
+            series: series
         });
     </script>
 

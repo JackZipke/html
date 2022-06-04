@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
+from readDataToSeries import *
 
 app = Flask(__name__)
 
@@ -16,7 +17,9 @@ def programmieren():
 
 @app.route('/programmieren/ladestationen')
 def ladestationen():
-    return render_template('ladestationen.html')
+    series = readDataToSeries()
+    print(series)
+    return render_template('ladestationen.html', series=series)
 
 if __name__ == '__main__':
     app.run(debug=True)   # später im fertigen einsatz debug zu "false" setzen
