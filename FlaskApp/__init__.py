@@ -17,9 +17,10 @@ def programmieren():
 
 @app.route('/programmieren/ladestationen')
 def ladestationen():
-    series = readDataToSeries()
-    print(series)
-    return render_template('ladestationen.html', series=series)
+    time = readDataToSeries()[0]
+    batSOC = readDataToSeries()[1]
+    series = readDataToSeries()[2]
+    return render_template('ladestationen.html', time=time, batSOC=batSOC, series=series)
 
 if __name__ == '__main__':
     app.run(debug=True)   # später im fertigen einsatz debug zu "false" setzen
