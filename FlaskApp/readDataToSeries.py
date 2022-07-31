@@ -8,6 +8,7 @@ def readDataToSeries():
     batSOC = []
     series = []
     
+    
     for header in headers:
         data = df[header].tolist()
         if header == "time":
