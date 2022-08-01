@@ -76,6 +76,8 @@
         var series = {{ series | tojson }};
         var batSOC = {{ batSOC | tojson }};
 
+        console.log(series)
+
         Highcharts.chart('container', {
             /*
             chart: {
