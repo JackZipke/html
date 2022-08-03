@@ -14,7 +14,7 @@ def jura():
 def programmieren():
     return render_template('programmieren.html')
 
-@app.route('/programmieren/ladestationen')
+@app.route('/programmieren/solaranlage')
 def ladestationen():
     with open("time.json", "r") as f:
         time = f.read()
@@ -27,7 +27,7 @@ def ladestationen():
     print(batSOC)
     print(series)
 
-    return render_template('ladestationen.html', time=time, batSOC=batSOC, series=series)
+    return render_template('solaranlage.html', time=time, batSOC=batSOC, series=series)
 
 if __name__ == '__main__':
     app.run(debug=True)   # spaeter im fertigen einsatz debug zu "false" setzen
