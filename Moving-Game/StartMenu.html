@@ -1,0 +1,63 @@
+<html>
+    <title>The Moving</title>
+    <meta charset="UTF-8">
+    <head>
+        <link rel="stylesheet" href="stylesheet0.css">
+
+        <items>
+            <a href="GameModes.html"><li><button>Game Modes</button></li></a>
+            <a href="OtherModes.html"><li><button>Other Modes</button></li></a>
+            <a href="Game/Credits.html"><li><button>Credits</button></li></a>
+            <a onclick="location='Game/MovingGame.zip'"><li><button>Download the Game</button></li></a>
+        </items>
+
+        <script>
+
+            var brick = new Image();        //Super-Mario-Block
+            brick.src = "Game/Assets/brick.png";
+
+            function drawFrame(){
+                // Diese Funktion wird nur einmal ausgeführt (nach Laden der Seite)
+
+                canv=document.getElementById("gc");         // Canvas aus HTML Teil ansteuern
+                ctx=canv.getContext("2d");                  // Kontext zum "zeichnen" festlegen
+
+                ctx.fillStyle = "black";
+                ctx.fillRect(0,0,1000,1000);
+
+                //Rahmen wird gemahlt
+                var brickPosition = [0,0];
+                for(var i = 0; i<= 19; i++){    //obere Reihe
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[0] += 50;
+                }
+                brickPosition = [0,950];
+                for(var i = 0; i<= 19; i++){    //untere Reihe
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[0] += 50;
+                }
+                brickPosition = [0,50];
+                for(var i = 0; i<=18; i++){     //linke Spalte
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[1] += 50;
+                }
+                brickPosition = [950,50];
+                for(var i = 0; i<=18; i++){     //rechte Spalte
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[1] += 50;
+                }
+
+                //Überschrift
+                ctx.fillStyle = "white";
+                ctx.font = "100px Phosphate"
+                ctx.fillText("The Moving", 225,200);
+            }
+
+        </script>
+
+    </head>
+
+    <body onload="drawFrame()">
+        <canvas   id="gc" width="1500" height="1000"></canvas>
+    </body>
+</html>

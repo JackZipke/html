@@ -1,0 +1,92 @@
+<html>
+    <title>The Moving</title>
+    <meta charset="UTF-8">
+    <head>
+        <script>
+
+            var brick = new Image();        //Super-Mario-Block
+            brick.src = "Game/Assets/brick.png";
+
+            var blue = new Image();
+            blue.src = "Game/Assets/WhiteMode.png";
+
+            var wood = new Image();
+            wood.src = "Game/Assets/woodBrick.png";
+
+            var iron = new Image();
+            iron.src = "Game/Assets/ironBrick.png";
+
+            function drawFrame(){
+                // Diese Funktion wird nur einmal ausgeführt (nach Laden der Seite)
+
+                canv=document.getElementById("gc");         // Canvas aus HTML Teil ansteuern
+                ctx=canv.getContext("2d");                  // Kontext zum "zeichnen" festlegen
+
+                ctx.fillStyle = "black";
+                ctx.fillRect(0,0,1000,1000);
+
+                //Rahmen wird gemahlt
+                var brickPosition = [0,0];
+                for(var i = 0; i<= 19; i++){    //obere Reihe
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[0] += 50;
+                }
+                brickPosition = [0,950];
+                for(var i = 0; i<= 19; i++){    //untere Reihe
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[0] += 50;
+                }
+                brickPosition = [0,50];
+                for(var i = 0; i<=18; i++){     //linke Spalte
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[1] += 50;
+                }
+                brickPosition = [950,50];
+                for(var i = 0; i<=18; i++){     //rechte Spalte
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[1] += 50;
+                }
+
+                //Überschrift
+                ctx.fillStyle = "white";
+                ctx.font = "100px Phosphate"
+                ctx.fillText("Select Pattern", 160,200);
+
+                ctx.drawImage(brick, 250, 300, 150, 150);
+                ctx.drawImage(blue, 600, 300, 150, 150);
+                ctx.drawImage(wood, 250, 650, 150, 150);
+                ctx.drawImage(iron, 600, 650, 150, 150);
+
+            }
+
+            function clicked(){
+                var pointerX = event.clientX - 8;
+                var pointerY = event.clientY - 8;
+
+                if(pointerY >= 300 && pointerY <= 450){
+                    if(pointerX >= 250 && pointerX <= 400){
+                        open("Game/Moving.html");
+                        window.close();
+                    }else if(pointerX >= 600 && pointerX <= 750){
+                        open("Game/MovingWhite.html");
+                        window.close();
+                    }
+                }else if(pointerY >= 650 && pointerY <= 800){
+                    if(pointerX >= 250 && pointerX <= 400){
+                        open("Game/MovingWood.html");
+                        window.close();
+                    }else if(pointerX >= 600 && pointerX <= 750){
+                        open("Game/MovingIron.html");
+                        window.close();
+                    }
+                }
+            }
+
+        </script>
+
+    </head>
+
+    <body onload="drawFrame()">
+        <canvas onclick="clicked()" id="gc" width="1500" height="1000"></canvas>
+    </body>
+</html>
