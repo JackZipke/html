@@ -1,0 +1,469 @@
+<!-- 3.1.4 LevelMaker.html -->
+
+<!DOCTYPE html>
+<html>
+    <title>The Moving</title>
+    <head>
+        <meta charset="UTF-8"> 
+        
+        <link rel="stylesheet" href="stylesheet.css">
+        
+        <items>
+            <a><li><button onclick="loadFileAsText()">Import<input type="file" id="myFile"></button></li></a>
+            <a><li><button onclick="exportFile()" id="ex">Export</button></li></a>
+            <a><li><button onclick="changeMode()" id="mo">Try</button></li></a>
+        </items>
+        
+        <script type="text/javascript">
+            
+            document.addEventListener("keydown",keyPush);   // Funktion: warten auf Tastendruck
+            
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            //VARIABLEN //
+            
+            var playerPosition = [65,915];  //Position des Spielers
+            var direction = null;           //Richtung, in die sich der Spieler bewegt
+            var alive = true;               //zeigt an, ob der Spieler lebt
+            
+            var modus = "build";            //zeigt an, ob gerade gebaut wird, oder gespielt
+            var win = false;                //zeigt an, ob gewonnen wurde
+            
+            var fields = [];                //zeigt an, was an welcher des Spielfeldes ist
+            var selected = 0;               //zeigt an, welches Objekt zum bauen ausgewählt ist
+            var colectableCount = 0;        //zeigt an, wie viele Colectables eingesammelt wurden
+            var maxColectables = 1;         //gibt an, wie viele Colectables benötigt werden, um blaue Bricks weg zu machen
+            var storedLevel = [];           //speichert das Level, bevor gespielt wird
+            
+            var myFile;    //Für Datei Im- und Export
+            
+            // BILDER //
+            
+            var brick = new Image();        // Bild vom Super-Mario-Stein
+            brick.src = "Assets/brick.png";
+            
+            var blueBrick = new Image();    // Bild blauer Stein
+            blueBrick.src = "Assets/blueBrick.png";
+            
+            var enemy = new Image();        // Bild vom Gegner
+            enemy.src = "Assets/gegner.png";
+            
+            var colectable = new Image();   // Bild vom Colectable
+            colectable.src = "Assets/blueColectable.png";
+            
+            var unselect = new Image();     // Bild von unselect (löschen von Bricks)
+            unselect.src = "Assets/unselect.png"
+            
+            
+        //////////////////////////////////////////////////////////////////////////////
+            
+            //Funktion wird immer wieder ausgeführt
+            function game(){
+                
+                ctx.fillStyle = "black";            //schwarzer Hintergrund
+                ctx.fillRect(0,0,1500,1000);        //Hintergrund füllen
+                
+                //Rahmen malen
+                var brickPosition = [0,0];
+                for(var i = 0; i<= 19; i++){    //obere Reihe
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[0] += 50;
+                }
+                brickPosition = [0,950];
+                for(var i = 0; i<= 19; i++){    //untere Reihe
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[0] += 50;
+                }
+                brickPosition = [0,50];
+                for(var i = 0; i<=18; i++){     //linke Spalte
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[1] += 50;
+                }
+                brickPosition = [950,50];
+                for(var i = 0; i<=18; i++){     //rechte Spalte
+                    ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                    brickPosition[1] += 50;
+                }
+                //folgendes wird nur angezeigt, wenn der Spieler noch lebt
+                if(alive){
+                    
+                    //Startfeld malen
+                    ctx.fillStyle = "gray";
+                    ctx.fillRect(50,900,50,50);
+
+                    //Malen der Objecte
+                    for(var i = 0; i <= 323; i++){  //geht das Spielfeld ab
+                        var drawPosition = getPosition((i+1)); //berechnet, wo gemalt werden soll
+                        //prüft, was gemalt werden soll
+                        if(fields[i] == "brick"){
+                            ctx.drawImage(brick,drawPosition[0],drawPosition[1]);
+                        }else if(fields[i] == "blueBrick"){
+                            ctx.drawImage(blueBrick,drawPosition[0],drawPosition[1]);
+                        }else if(fields[i] == "colectable"){
+                            ctx.drawImage(colectable,drawPosition[0],drawPosition[1]);
+                        }else if(fields[i] == "winfield"){
+                            ctx.fillStyle = "yellow";
+                            ctx.fillRect(drawPosition[0],drawPosition[1],50,50);
+                        }
+                    }
+
+                    //Spieler malen
+                    ctx.fillStyle = "red";          //Farbe rot
+                    ctx.fillRect(playerPosition[0], playerPosition[1], 20, 20);
+
+                    //folgendes wird nur ausgeführt, wenn gerade gebaut wird
+                    if(modus == "build"){
+
+                        // Gitter malen
+                        ctx.fillStyle = "white";
+
+                        for(var i = 100; i<=900; i += 50){
+                            ctx.fillRect(50,i,900,1);
+                        }
+                        for(var i = 100; i<=900; i += 50){
+                            ctx.fillRect(i,50,1,900);
+                        }
+
+                        //Icon Hintergrund malen, wenn selected (an der Seite)
+                        ctx.fillStyle = "white";
+                        if(selected == "brick"){
+                            ctx.fillRect(1045,45,110,110);
+                            
+                        }else if(selected == "blueBrick"){
+                            ctx.fillRect(1045,195,110,110);
+                            
+                        }else if(selected == "colectable"){
+                            ctx.fillRect(1045,345,110,110);
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(1050, 350, 100, 100);
+                            ctx.fillStyle = "white";
+                        }else if(selected == "undo"){
+                            ctx.fillRect(1045,845,110,110);
+                            ctx.fillStyle = "black";
+                            ctx.fillRect(1050, 850, 100, 100);
+                            ctx.fillStyle = "white";
+                        }else if(selected == "winfield"){
+                            ctx.fillRect(1045,645,110,110);
+                        }
+
+                        // Icons an der Seite malen
+                        ctx.drawImage(brick, 1050, 50, 100, 100);
+                        ctx.drawImage(blueBrick, 1050, 200, 100, 100);
+                        ctx.drawImage(colectable, 1050, 350, 100, 100);
+                        ctx.drawImage(unselect, 1050, 850);
+                        ctx.fillStyle = "yellow";
+                        ctx.fillRect(1050,650, 100, 100);
+
+                    } 
+                    
+                    //wird ausgeführt, wenn gewonnen wurde
+                    if(win){
+                        reset();    //setzt level wieder zurück
+                        //Gewinnanzeige
+                        ctx.fillStyle = "black";
+                        ctx.fillRect(50,50,900,900);
+                        ctx.fillStyle = "green";
+                        ctx.font = "100px Phosphate"
+                        ctx.fillText("Level Finished", 200,300);
+                        ctx.fillStyle = "white";
+                        ctx.font = "40px Impact";
+                        ctx.fillText("Press [Space] to continue!", 270, 700);
+                    }
+                    
+                }else{
+                    //Spieler ist "Game Over"
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(50,50,900,900);
+                    ctx.fillStyle = "red";
+                    ctx.font = "70px Arial"
+                    ctx.fillText("GAME OVER", 280, 300);
+                    ctx.fillStyle = "white";
+                    ctx.font = "40px Arial";
+                    ctx.fillText("Press [Space] to try again!", 270, 700);
+                    window.direction = "null";
+                }
+                
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                
+            // FUNKTIONEN //
+                
+            }
+            //Wird ausgeführt, wenn der Spieler mit der Maus auf den Canvas klickt.
+            function clicked(){
+                var pointerX = event.clientX - 8;   // - 8, da event.clientX/Y die Mitte des 
+                var pointerY = event.clientY - 8;   // Mauszeigers und nicht die Spitze nimmt
+                
+                // wenn eine Auswahl getroffen wird
+                if(pointerX >= 1050 && pointerX <= 1150){   //prüft, ob in der Spalte der Symbole gedrückt wurde
+                    //prüft, welches Objekt ausgewählt wurde
+                    if(pointerY >= 50 && pointerY <= 150){
+                        window.selected = "brick";
+                    }else if(pointerY >= 200 && pointerY <= 300){
+                        window.selected = "blueBrick";
+                    }else if(pointerY >= 350 && pointerY <= 450){
+                        window.selected = "colectable";
+                    }else if(pointerY >= 650 && pointerY <= 750){
+                        window.selected = "winfield";
+                    }else if(pointerY >= 850 && pointerY <= 950){
+                        window.selected = "undo";
+                    }
+                }
+                
+                //Es wird ein Feld ausgewählt
+                else{
+                    calcField(pointerX,pointerY);   //berechnet das Feld, auf das gecklickt wurde
+                }                                   //und weist im das ausgewählte Objekt zu
+            }
+            
+            //wird ausgeführt, wenn der Try- bzw. Build-Button gedrückt wird
+            function changeMode(){
+                if(modus == "build"){   //wenn gerade noch gebaut wurde
+                    for(var i = 0; i<=323; i++){
+                        window.storedLevel[i] = fields[i];  //macht ein Backup des levels
+                        //prüft die Anzahl der Colectables
+                        if(fields[i] == "colectable"){
+                            window.maxColectables += 1;
+                        }
+                    }
+                    
+                    window.maxColectables -= 1;
+                    document.getElementById("mo").innerHTML = "<a>Build</a>";   //ändert den Text 
+                    window.modus = "try";   //wechselt den Modus                  des Knopfes
+                    
+                }else if(modus == "try"){   //wenn gerade noch gespielt wurde
+                    
+                    window.modus = "build"; //wechselt den Modus
+                    document.getElementById("mo").innerHTML = "<a>Try</a>";     //ändert den Text                                  
+                    for(var i = 0;i<=323;i++){                                  //des Knopfes
+                        fields[i] = storedLevel[i];     //lädt das Backup
+                    }
+
+                }
+                reset();    //setzt alles auf Anfangswerte zurück
+            }
+            
+            //berechnet aus den x- und y-koordinaten das Feld
+            function calcField(x,y){    
+                var selectedField;
+                if(x < 950){
+                    var spalte = parseInt(x / 50);  // jede Spalte ist 50 breit
+                }
+                if(y < 950){
+                    var reihe = parseInt(y / 50);   // jede Reihe ist 50 hoch
+                }
+                
+                selectedField = (reihe - 1) * 18 + spalte;  
+                
+                if(modus == "build"){
+                    setField(selectedField);    //platziert das Feld
+                }
+            }
+            
+            
+            function setField(nr){
+                window.fields[(nr - 1)] = selected;         //platziert das Objekt
+                window.storedLevel[(nr - 1)] = selected;    //auch im Backup
+            }
+                
+            //wandelt ein fled in Koordinaten um
+            function getPosition(nr){
+                var position = [0,0];
+                 if((nr % 18) == 0){                         // Fall tritt ein wenn es sich um ein Feld
+                    position[0] = 18 * 50;                   // der letzten Spalte handelt (18,36,54, ...)
+                    position[1] = (parseInt(nr / 18)) * 50;
+                }else{
+                    position[0] = (nr % 18) * 50;
+                    position[1] = (parseInt(nr / 18) + 1) * 50;
+                }
+                
+                return position;    //gibt die Koordinanten zurück
+            }
+            
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            // IM- & EXPORT //
+            
+            function loadFileAsText(){
+              var myFile = document.getElementById("myFile").files[0];  // gibt der Datei die Daten
+
+              var fileReader = new FileReader();            //liest die Daten
+              fileReader.onload = function(fileLoadedEvent){//wenn geladen
+                  var text = fileLoadedEvent.target.result; //der Variable wird der text gegeben
+                  window.fields = text.split(",");  //wird auf die Fields übertragen
+              };
+
+              fileReader.readAsBinaryString(myFile, "UTF-8");   //sagt das er es als String lesen soll
+            }
+            
+            function exportFile(){
+                var name = "MovingLevel(" + Date() + ").txt";   //name der Datei
+                uriContent = "data:application/octet-stream," + encodeURIComponent(fields);
+                document.getElementById("ex").innerHTML = 
+                "<a href=" + uriContent + "\ndownload=\"MovingLevel.txt\" >Download</a>";
+	        }
+            
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            //FUNKTIONEN FÜR'S SPIELEN
+            
+            // bewegt den Spieler
+            function move(){
+                
+                if(direction == "up"){
+                    playerPosition[1] -= 1;
+                }else if(direction == "down"){
+                    playerPosition[1] += 1;
+                }else if(direction == "right"){
+                    playerPosition[0] += 1;
+                }else if(direction == "left"){
+                    playerPosition[0] -= 1;
+                }
+            }
+            
+            //Bestimmt auf welchen Feldern sich der Spieler befindet
+            function checkPlayerFields(){
+                
+                var spalte = parseInt(playerPosition[0]/50);
+                var restSpalte = (playerPosition[0] % 50) / 50;
+                var reihe = parseInt(playerPosition[1]/50);
+                var restReihe = (playerPosition[1] % 50) / 50;
+                reihe --; //Reihen müssen bei 0 und nicht bei 1 anfangen
+                //Rest wird gebraucht um zu bestimmen, ob der Spieler sich auf mehreren Feldern befindet
+                
+                var field1 = reihe * 18 + spalte;
+                window.playerFields[0] = field1;
+                
+                //prüft, ob mehrere Felder berührt werden
+                if(restSpalte > 0.6 && restReihe > 0.6){
+                    window.playerFields[1] = field1 + 1;
+                    window.playerFields[2] = field1 + 18;
+                    window.playerFields[3] = playerFields[2] + 1;
+                    
+                }else if(restSpalte > 0.6 && restReihe < 0.6){
+                    window.playerFields[1] = field1 + 1;
+                    window.playerFields[2] = 0;
+                    window.playerFields[3] = 0;
+                    
+                }else if(restSpalte < 0.6 && restReihe > 0.6){
+                    window.playerFields[1] = 0;
+                    window.playerFields[2] = field1 + 18;
+                    window.playerFields[3] = 0;
+                    
+                }else if(restSpalte < 0.6 && restReihe < 0.6){
+                    window.playerFields[1] = 0;
+                    window.playerFields[2] = 0;
+                    window.playerFields[3] = 0;
+                }
+                //prüft die Felder des Spielers auf Objekte
+                for(var i = 0; i<=3; i++){
+                    //überprüft Collision
+                    if((fields[(playerFields[i] - 1)] == "brick" )|| (fields[(playerFields[i] - 1)] == "blueBrick")){
+                        window.alive = false;
+                    }
+                    //Colectables einsammeln
+                    if(fields[(playerFields[i] - 1)] == "colectable"){
+                        window.fields[(playerFields[i] - 1)] = 0; 
+                        window.colectableCount += 1;
+                        
+                    }
+                    //gewinn prüfen
+                    if(fields[(playerFields[i] - 1)] == "winfield"){
+                        window.win = true;
+                    }
+                }
+            }
+            
+            function collision(){
+                
+                //prüft ob der Spieler rechts oder links mit der Wand kollidiert
+                if(playerPosition[0] >= 930 || playerPosition[0] <= 50){  
+                    window.alive = false;
+                }
+                //prüft ob der Spieler oben oder unten mit der Wand kollidiert
+                else if(playerPosition[1] >= 930 || playerPosition[1] <= 50){
+                    window.alive = false;
+                }
+            }
+            
+            //prüft, ob alle colectables eingesammelt wurden
+            function checkBlueBricks(){
+                //wenn ja werden die blauen Blöcke gelöscht
+                if(colectableCount >= maxColectables){
+                    for(var i = 0; i <= 323; i++){
+                        if(fields[i] == "blueBrick"){
+                            window.fields[i] = 0;
+                        }
+                    }
+                }
+            }
+            
+            //setzt auf Standardwerte zurück
+            function reset(){
+                window.playerPosition = [65,915];
+                window.playerFields = [];
+                window.direction = "null";
+                window.alive = true;
+                window.colectableCount = 0;
+                 
+            }
+            
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            function nachLaden(){         
+                // Diese Funktion wird nur einmal ausgeführt (nach Laden der Seite)
+                
+                canv=document.getElementById("gc");         // Canvas aus HTML Teil ansteuern
+                ctx=canv.getContext("2d");                  // Kontext zum "zeichnen" festlegen
+                
+                //setzt die Intervalle der Funktionen
+                setInterval(game,1000/50);
+                setInterval(move,1000/160);
+                setInterval(collision,1000/30);
+                setInterval(checkPlayerFields,1000/30);
+                setInterval(checkBlueBricks,1000/30);
+                
+                //initialisiert die Felder
+                //alle sind am Anfang leer (0)
+                for(var i = 0; i <= 323; i++){
+                    window.fields[i] = 0;
+                    window.storedLevel[i] = 0;
+                }
+                
+                console.log("initialisiert");
+                
+            }   
+            //wird bei Tastendruck ausgeführt
+            function keyPush(evt) {
+                if(modus == "try"){
+                    switch(evt.keyCode) {
+                    // Richtungsänderung durch Pfeiltasten
+                    case 38:    //Pfeil nach oben
+                        direction = "up"
+                        break;
+                    case 40:    //Pfeil nach unten
+                        direction = "down"
+                        break;
+                    case 37:    //Pfeil nach links
+                        direction = "left"
+                        break;
+                    case 39:    //Pfeil nach rechts
+                        direction = "right"
+                        break;  
+                    case 32:
+                        reset();
+                        window.win = false;
+                        break;
+                    }
+                }
+            }
+            
+        </script>
+    
+    </head>
+        
+    <body onload="nachLaden()">
+        
+        <canvas onclick="clicked()" id="gc" width="1500" height="1000"></canvas>
+        
+    </body> 
+</html>
