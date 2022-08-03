@@ -1,0 +1,26 @@
+button{
+    text-decoration: none;
+    font-size: 65; 
+    color: #FFFFFF;
+    font-family: ;
+    background: linear-gradient(to bottom, #96492b, #701d18);
+    border: solid #000000 10px;
+    
+    padding: 20px;
+    margin-top: 5px;
+    width: 665px;
+}
+button:hover{
+    color: #F1FAFF;
+    background: #96492b;       
+}
+li{
+    text-align: center;
+    list-style-type: none;
+    padding-bottom: 10px;
+}
+items{
+    position: absolute;
+    top: 280px;
+    left: 175px;  
+}

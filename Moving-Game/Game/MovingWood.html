@@ -1,0 +1,311 @@
+<!-- 3.1.2 Moving.html -->
+
+<!DOCTYPE html>
+<html>
+    <title>The Moving</title>
+    <head>
+        <meta charset="UTF-8"> 
+        
+        <script src="Scripts/Variablen.js" type="text/javascript"></script>     <!-- Lädt die Variablen -->
+        <script src="Scripts/Positioning.js" type="text/javascript"></script>   <!-- Lädt die Script für die Positionierung -->
+        <script src="Scripts/Level.js" type="text/javascript"></script>         <!-- Lädt die Level -->  
+        <script src="Scripts/Check.js" type="text/javascript"></script>         <!-- Lädt Funktionen zum Checken -->
+        <script src="Scripts/Collision.js" type="text/javascript"></script>     <!-- Lädt die Kollisionsabfragen -->
+        <script src="Scripts/Balls.js" type="text/javascript"></script>         <!-- Lädt Scripts für die Bälle -->
+        <script src="Scripts/Movement.js" type="text/javascript"></script>      <!-- Lädt Bewegungs-Funktionen -->
+        
+        <script type="text/javascript">
+            
+            document.addEventListener("keydown",keyPush);   // Funktion: warten auf Tastendruck
+            
+            brick.src = "Assets/woodBrick.png";
+            colectable.src = "Assets/redColectable.png";
+            breakableBrick.src = "Assets/brokenWood1.png";
+            breakableBrick2.src = "Assets/brokenWood2.png";
+            blueBrick.src = "Assets/door.png"
+
+            background = new Image();
+            background.src = "Assets/backgroundWood.png"
+
+            //Funktion wird immer wieder ausgeführt
+            function game(){
+                
+                if(alive){                              //Wenn der Spieler noch lebt
+                    ctx.drawImage(background, 50, 50);
+                
+                    //Rahmen malen
+                    var brickPosition = [0,0];      //obere Reihe
+                    for(var i = 0; i<= 19; i++){    
+                        ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                        brickPosition[0] += 50;     //geht immer weiter nach rechts
+                    }
+                    brickPosition = [0,950];        //untere Reihe        
+                    for(var i = 0; i<= 19; i++){    // geht diie Blöcke nach und nach durch
+                        ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                        brickPosition[0] += 50;     //geht immer weiter nach rechts
+                    }
+                    brickPosition = [0,50];         //linke Spalte
+                    for(var i = 0; i<=18; i++){     
+                        ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                        brickPosition[1] += 50;     //geht immer weiter nach unten
+                    }
+                    brickPosition = [950,50];       //rechte Spalte
+                    for(var i = 0; i<=18; i++){     
+                        ctx.drawImage(brick, brickPosition[0], brickPosition[1]);
+                        brickPosition[1] += 50;     //geht immer weiter nach unten
+                    }
+                    
+                    //Startfeld malen
+                    ctx.fillStyle = "grey";         //Farbe grau
+                    ctx.fillRect(startField[0],startField[1], 50,50);   //Rechteck malen (50x50)
+                    
+                    //Gewinn-Feld malen
+                    ctx.fillStyle = "yellow";       //Farbe gelb
+                    ctx.fillRect(winPosition[0],winPosition[1],winPosition[2],winPosition[3]);  //Rechteck malen
+                    
+                    //Spieler malen
+                    ctx.fillStyle = "red";          //Farbe rot
+                    ctx.fillRect(playerPosition[0], playerPosition[1], 20, 20); //Rechteck malen
+                    
+                    
+                    // bei den folgenden Blöcken immer ähnlich:
+                    // Geht alle Elemente in den Arrays ab und malt die Objekte
+                    
+                    //Steine malen
+                    for(var i = 0; i<=(brickFields.length - 1); i++){   //Geht das Array ab,    
+                        var position = fieldToCoords(brickFields[i]);   //gibt die das feld an die Funktion
+                        ctx.drawImage(brick,position[0],position[1]);   //Malt den Brick 
+                    }
+                    //bewegliche Bricks malen
+                    for(var i = 0; i<=(movingBrickFields.length - 1); i++){     //    -//-
+                        var position = fieldToCoords(movingBrickFields[i]);
+                        ctx.drawImage(brick,position[0],position[1]);
+                    }
+                    //colectables malen
+                    for(var i = 0; i<=(colectableFields.length - 1); i++){
+                        if(colectableFields[i][1]){                                 //nur dann, wenn das Collectable noch nicht 
+                            var position = fieldToCoords(colectableFields[i][0]);   //eingesammelt wurde
+                            ctx.drawImage(colectable,position[0],position[1]);
+                        }
+                    }
+                    //blaue Bricks malen
+                    for(var i = 0; i<=(blueBrickFields.length - 1); i++){
+                        if(blueBrickFields[i][1]){                                  //nur, wenn blaue Bricks noch da sind
+                            var position = fieldToCoords(blueBrickFields[i][0]);
+                            ctx.drawImage(blueBrick,position[0],position[1]);
+                        }
+                    }
+                    
+                    //kaputte Bricks malen
+                    for(var i = 0; i<=(breakableBrickFields.length - 1); i++){  //geht alle Elemente des Arrays durch
+                        //gibt der Funktion das Feld des Blocks und bekommt Position zurück
+                        var position = fieldToCoords(breakableBrickFields[i][0]);   
+                        if(breakableBrickFields[i][1] == 2){                        //malt, wenn noch nicht angeschossen
+                            ctx.drawImage(breakableBrick,position[0],position[1]);
+                        }else if(breakableBrickFields[i][1] == 1){                  //malt, wenn einmal angeschossen
+                            ctx.drawImage(breakableBrick2,position[0],position[1]);
+                        }                                                           //ansonsten wird es nicht gemalt
+                    }
+                    
+                    //malt den Gegner
+                    ctx.drawImage(enemy,xEnemy,yEnemy); 
+                    
+                    //malt die Bälle
+                    ctx.fillStyle = "white";        //Farbe weiß
+                    for(var i = 0;i<=2;i++){        //geht die 3 Bälle ab                 
+                        if(balls[i][0] == false){   //nur wenn der Ball auch abgeschossen wurde
+                            ctx.fillRect(balls[i][2],balls[i][3],20,20);    //Malt ein Rechteck als Gegner (20x20)
+                        }
+                    }
+                     
+                    //Startbildschirm
+                    if(level == 0){               
+                        ctx.fillStyle = "white";                //Farbe weiß
+                        ctx.font = "100px Phosphate"            //Schriftart 
+                        ctx.fillText("The Moving", 225,300);    //schreibt den Titel
+                        ctx.font = "40px Impact";               //Schriftart
+                        ctx.fillText("Press [Space] to start game!", 270, 700); //schreibt den Weiter-Text
+                    
+                    //Anzeigen zwischen den einzelnen Leveln
+                    }else if(((level % 2) == 0) && level != 0 && level != 48){ //wen es eine gerade Level anzahl ist
+                        ctx.fillStyle = "green";                //Farbe grün
+                        ctx.font = "100px Phosphate"            //Schriftart
+                        ctx.fillText("Level Finished", 200,300);//schreibt Gewinn-Text
+                        ctx.fillStyle = "white";                //Farbe weiß
+                        ctx.font = "40px Impact";               //schriftart
+                        ctx.fillText("Press [Space] for next level!", 270, 700);    //schreibt den Weiter-Text
+                        
+                    //Die nächsten Blöcke machen alle das gleiche:
+                    //sie wählen weiße Farbe, wählen die Schriftart und schreiben dann das Level
+                    }else if(level == 3){
+                        ctx.fillStyle = "white";
+                        ctx.font = "110px Impact";
+                        ctx.fillText("Level 2", 325, 920);
+                    }else if(level == 5){
+                        ctx.fillStyle = "white";
+                        ctx.font = "180px Impact";
+                        ctx.fillText("Level 3", 95, 750);
+                    }else if(level == 7){
+                        ctx.fillStyle = "white";
+                        ctx.font = "110px Impact";
+                        ctx.fillText("Level 4", 422, 190);
+                    }else if(level == 9){
+                        ctx.drawImage(brick,400,550);   //fügt einen Cheat weg hinzu ;)
+                    }else if(level == 13){
+                        ctx.fillStyle = "white";
+                        ctx.font = "140px Impact";
+                        ctx.fillText("Level 7", 560, 905);
+                    }else if(level == 15){
+                        ctx.fillStyle = "white";
+                        ctx.font = "120px Impact";
+                        ctx.fillText("Level 8", 55, 745);
+                    }else if(level == 17){
+                        ctx.fillStyle = "white";
+                        ctx.font = "150px Impact";
+                        ctx.fillText("Level 9", 510, 540);
+                    }else if(level == 21){
+                        ctx.fillStyle = "white";
+                        ctx.font = "90px Impact";
+                        ctx.fillText("Level 11", 660, 510);
+                    }else if(level == 23){
+                        ctx.fillStyle = "white";
+                        ctx.font = "115px Impact";
+                        ctx.fillText("Level 12", 560, 740);
+                    }else if(level == 27){
+                        ctx.fillStyle = "white";
+                        ctx.font = "90px Impact";
+                        ctx.fillText("Level 14", 657, 160);
+                    }else if(level >= 48){
+                        ctx.fillStyle = "green";                //Farbe grün
+                        ctx.font = "100px Phosphate"            //Schriftart
+                        ctx.fillText("Game Finished", 180,300); //schreibt Gewinn-Text
+                        ctx.fillStyle = "white";                //Farbe weiß
+                        ctx.font = "40px Impact";
+                        ctx.fillText("Press [Space] to go back to start menue!", 180, 700);
+                    }
+                    
+                //Wenn der Spieler Tot ist wird das ausgeführt
+                }else{
+                    //Spieler ist "Game Over"
+                    ctx.fillStyle = "black";        //Farbe schwarz
+                    ctx.fillRect(50,50,900,900);    //Malt ein schwarzes Rechteck über das Spielart
+                    ctx.fillStyle = "red";          //Farbe rot
+                    ctx.font = "70px Arial"         //Schriftart
+                    ctx.fillText("GAME OVER", 280, 300);    //malt den Game Over-Text
+                    ctx.fillStyle = "white";        //Farbe weiß
+                    ctx.font = "40px Arial";        //Schriftart
+                    ctx.fillText("Press [Space] to try again!", 270, 700);  //schreibt den Weiter-Text
+                }
+            }          
+            
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            //Setzt die Level zurück auf ihre Ausgangswerte
+            function reset(){
+                window.playerPosition[0] = startPosition[0];
+                window.playerPosition[1] = startPosition[1];
+                window.winField = [];
+                window.playerFields = [];
+                window.movingBrickFields = [];
+                window.toMoveBricks = [];
+                window.direction = "null";
+                window.alive = true;
+                window.colectableScore = 0;
+                window.colectableFields = [];
+                window.maxColectables = 0;
+                window.blueBrickFields = [];
+                window.enemyFields = [];
+                window.balls = [[true],[true],[true]];
+                window.ballCount = 3;
+                window.breakableBrickFields = [];
+                
+                if(level >= 48){
+                    window.level = 0;
+                    document.cookie = "" + level;
+                    document.location.href = "http://www.jz-cs-info.de/Projekte/Moving_Game/StartMenu.html";
+                    
+                }else{
+                    document.cookie = "" + level;  
+                }
+                
+                if(level == 0){
+                    window.level = 1;
+                }
+                if((level % 2) == 0){
+                    window.level += 1;
+                }
+                
+                setLevel();                 // legt die Werte für die Level fest, siehe andere Datei
+                
+            }  
+            
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            function nachLaden(){         
+                // Diese Funktion wird nur einmal ausgeführt (nach Laden der Seite)
+                
+                canv=document.getElementById("gc");         // Canvas aus HTML Teil ansteuern
+                ctx=canv.getContext("2d");                  // Kontext zum "zeichnen" festlegen
+                
+                //Prüfen auf Kolisionen
+                setInterval(checkCollision,1000/30);
+                
+                //prüfen ob alles eingesammelt
+                setInterval(checkColectables,1000/30);
+                
+                // Prüfen auf Sieg
+                setInterval(checkForWin,1000/30);
+                
+                setInterval(game,1000/30);                  // Die Funktion game 30 mal pro Sekunde Aufrufen
+                setInterval(move,1000/160);                 // Geschwindigkeit mit der sich die Spielfigur bewegt
+                setInterval(moveBricks,1000/2);             // Geschwindigkeit der Blöcke
+                setInterval(moveEnemy,1000/4);              // Geschwindigkeit des Gegners
+                setInterval(moveBalls,1000/720);            // Geschwindigkeit der Bälle
+                
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                if(parseInt(ca[0]) > 0 && parseInt(ca[0]) <= 48){
+                    window.level = parseInt(ca[0]);
+                }
+                
+                reset();
+                
+            }   
+            
+            function keyPush(evt) {
+                music.play();
+
+                switch(evt.keyCode) {
+                // Richtungsänderung durch Pfeiltasten
+                case 38:    //Pfeil nach oben
+                    direction = "up"
+                    break;
+                case 40:    //Pfeil nach unten
+                    direction = "down"
+                    break;
+                case 37:    //Pfeil nach links
+                    direction = "left"
+                    break;
+                case 39:    //Pfeil nach rechts
+                    direction = "right"
+                    break;  
+                case 32:    //Leertaste
+                    reset(); 
+                    break;
+                case 75:    //K
+                    window.direction = "null";
+                    break;
+                case 70:    //F
+                    shoot();
+                    break;
+                }
+            }
+            
+        </script>
+    
+    </head>
+        
+    <body onload="nachLaden()">
+        <canvas   id="gc" width="1500" height="1000"></canvas>
+    </body> 
+</html>
