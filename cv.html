@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lebenslauf</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="static/css/w3.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6,a,p,i,b {
+  font-family: "Lato", sans-serif;
+  color: black
+}
+
+
+</style>
+</head>
+<body class="w3-cyan">
+
+  <div class="w3-cell-top">
+    <div class="w3-bar w3-card w3-white" id="myNavbar">
+      <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right w3-white" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="index.html" class="w3-bar-item w3-button w3-hover-cyan"><i class="fa fa-home"></i>   Startseite</a>
+      <a href="cv.html" class="w3-bar-item w3-button w3-hide-small w3-hover-cyan"><i class="fa fa-user"></i>  Lebenslauf</a>
+      <a href="jura.html" class="w3-bar-item w3-button w3-hide-small w3-hover-cyan"><i class="fa fa-file"></i>  Jura</a>
+      <a href="china.html" class="w3-bar-item w3-button w3-hide-small w3-hover-cyan"><i class="fa fa-plane"></i>  China</a>
+      <a href="sonstiges.html" class="w3-bar-item w3-button w3-hide-small w3-hover-cyan"><i class="fa fa-th"></i>  Sonstiges</a>
+    </div>
+  
+    <!-- Navbar on small screens -->
+    <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
+      <a href="cv.html" class="w3-bar-item w3-button w3-hover-cyan" onclick="toggleFunction()">Lebenslauf</a>
+      <a href="jura.html" class="w3-bar-item w3-button w3-hover-cyan" onclick="toggleFunction()">Jura</a>
+      <a href="china.html" class="w3-bar-item w3-button w3-hover-cyan" onclick="toggleFunction()">China</a>
+      <a href="sonstiges.html" class="w3-bar-item w3-button w3-hover-cyan" onclick="toggleFunction()">Sonstiges</a>
+    </div>
+  </div>  
+
+
+  
+<!-- Page Container -->
+<div class="w3-content w3-margin-top" style="max-width:1400px;">
+
+
+  <!-- The Grid -->
+  <div class="w3-row-padding">
+  
+    
+    
+    <!-- Left Column -->
+    <div class="w3-third">
+    
+      <div class="w3-white w3-text-grey w3-card-4">
+        <div class="w3-display-container">
+          <img src="static/assets/Profilbild.JPG" style="width:100%" alt="Avatar">
+          <div class="w3-display-topright w3-container w3-text-white">
+            <h2></h2>
+          </div>
+        </div>
+        <div class="w3-container">
+          <p><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-cyan"></i>Jack J. Zipke</p>
+          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-cyan"></i>Student</p>
+          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-cyan"></i>Halle (Saale)</p>
+          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-cyan"></i>jackzipke@icloud.com</p>
+          <hr>
+
+          <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-cyan"></i>Fremdsprachenkenntnisse</b></p>
+          
+          <h5><b>Englisch</b></h5>
+          <div class="w3-cyan w3-round-xlarge">
+            <p>CEFR B2 (Camebridge Assesment English)</p> 
+          </div>
+
+          <h5><b>Chinesisch</b></h5>
+          <div class="w3-cyan w3-round-xlarge">
+            <p>HSK 3 (entspricht etwa CEFR A2)</p> 
+            <p>Schulaustausch an der NEHS in Taiwan (03/2019)</p>
+          </div>
+          
+          <br>
+        </div>
+      </div><br>
+
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="w3-twothird">
+    
+      <div class="w3-container w3-card w3-white w3-margin-bottom">
+        
+        <h2 class="w3-text-black w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-cyan"></i>Berufserfahrung</h2>
+        
+        <div class="w3-container">
+          <h5 class="w3-text-black"><b>Studentische Hilfskraft</b></h5>
+          <h5 class="w3-opacity"><b></b></h5>
+          <h6 class="w3-text-black"><i class="fa fa-calendar fa-fw w3-margin-right"></i>10/2022 – <span class="w3-tag w3-cyan w3-round">heute</span></h6>
+          <p>Lehrstuhl für Öffentliches Recht <br>Prof. Dr. Winfried Kluth</p>
+          <hr>
+        </div>
+
+        <div class="w3-container">
+          <h5 class="w3-text-black"><b>Praktikum</b></h5>
+          <h5 class="w3-opacity"><b></b></h5>
+          <h6 class="w3-text-black"><i class="fa fa-calendar fa-fw w3-margin-right"></i>02/2023 – 03/2023</h6>
+          <p>Oberverwaltungsgericht des Landes Sachsen-Anhalt</p>
+          <hr>
+        </div>
+        
+
+      </div>
+
+      <div class="w3-container w3-card w3-white w3-margin-bottom">
+        <h2 class="w3-text-black w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-cyan"></i>Bildungsweg</h2>
+        
+        <div class="w3-container">
+          <h5 class="w3-text-black"><b>Studium der Rechtswissenschaften</b></h5>
+          <h6 class="w3-text-black"><i class="fa fa-calendar fa-fw w3-margin-right"></i>10/2021 – <span class="w3-tag w3-cyan w3-round">heute</span></h6>
+          <p>Martin-Luther-Universität Halle-Wittenberg</p>
+          <hr>
+        </div>
+        
+        <div class="w3-container">
+          <h5 class="w3-text-black""><b>Abitur</b></h5>
+          <h6 class="w3-text-black"><i class="fa fa-calendar fa-fw w3-margin-right"></i>08/2015 – 06/2021</h6>
+          <p>Schwerpunkt: Gesellschaftswissenschaften <br>Abschlussnote: 1,0</p>
+          <hr>
+        </div>
+
+      </div>
+
+      <div class="w3-container w3-card w3-white">
+        <h2 class="w3-text-black w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-cyan"></i>Engagement</h2>
+        
+        <div class="w3-container">
+          <h5 class="w3-text-black""><b>Finanzer im Kaulenberg e.V.</b></h5>
+          <h6 class="w3-text-black"><i class="fa fa-calendar fa-fw w3-margin-right"></i>06/2023 – <span class="w3-tag w3-cyan w3-round">heute</span></h6>
+          <hr>
+        </div>
+
+        <div class="w3-container">
+          <h5 class="w3-text-black"><b>Präsidiumsmitglied im ELSA-Halle e.V.</b></h5>
+          <h6 class="w3-text-black"><i class="fa fa-calendar fa-fw w3-margin-right"></i>01/2022 – <span class="w3-tag w3-cyan w3-round">heute</span></h6>
+          <p>Präsident (07/2023 – heute)</p>
+          <p>Vorstand für Finanzen (01/2023 – 07/2023)</p>
+          <hr>
+        </div>
+        
+        
+
+      </div>
+
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
+
+<footer class="w3-container w3-cyan w3-center w3-margin-top">
+  <p>Find me on social media.</p>
+  <i class="fa fa-facebook-official w3-hover-opacity"></i>
+  <i class="fa fa-instagram w3-hover-opacity"></i>
+  <i class="fa fa-snapchat w3-hover-opacity"></i>
+  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+  <i class="fa fa-twitter w3-hover-opacity"></i>
+  <i class="fa fa-linkedin w3-hover-opacity"></i>
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+
+<script>
+  // Change style of navbar on scroll
+  window.onscroll = function() {myFunction()};
+  function myFunction() {
+      var navbar = document.getElementById("myNavbar");
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+          navbar.className = "w3-bar" + " w3-card" + " w3-animate-top" + " w3-white";
+      } else {
+          navbar.className = navbar.className.replace(" w3-card w3-animate-top w3-white", "");
+      }
+  }
+
+// Used to toggle the menu on small screens when clicking on the menu button
+  function toggleFunction() {
+      var x = document.getElementById("navDemo");
+      if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
+      } else {
+          x.className = x.className.replace(" w3-show", "");
+      }
+  }
+</script>
+
+
+</body>
+</html>
