@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Jura</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="static/css/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+</head>
+<body class="w3-cyan">
+
+  <div class="w3-cell-top">
+    <div class="w3-bar w3-card w3-white" id="myNavbar">
+      <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right w3-white" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a href="index.html" class="w3-bar-item w3-button w3-hover-cyan"><i class="fa fa-home"></i>   Startseite</a>
+      <a href="cv.html" class="w3-bar-item w3-button w3-hide-small w3-hover-cyan"><i class="fa fa-user"></i>  Lebenslauf</a>
+      <a href="jura.html" class="w3-bar-item w3-button w3-hide-small w3-hover-cyan"><i class="fa fa-file"></i>  Jura</a>
+      <a href="china.html" class="w3-bar-item w3-button w3-hide-small w3-hover-cyan"><i class="fa fa-plane"></i>  China</a>
+      <a href="sonstiges.html" class="w3-bar-item w3-button w3-hide-small w3-hover-cyan"><i class="fa fa-th"></i>  Sonstiges</a>
+    </div>
+  
+    <!-- Navbar on small screens -->
+    <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
+      <a href="cv.html" class="w3-bar-item w3-button w3-hover-cyan" onclick="toggleFunction()">Lebenslauf</a>
+      <a href="jura.html" class="w3-bar-item w3-button w3-hover-cyan" onclick="toggleFunction()">Jura</a>
+      <a href="china.html" class="w3-bar-item w3-button w3-hover-cyan" onclick="toggleFunction()">China</a>
+      <a href="sonstiges.html" class="w3-bar-item w3-button w3-hover-cyan" onclick="toggleFunction()">Sonstiges</a>
+    </div>
+  </div>
+
+
+<!-- w3-content defines a container for fixed size centered content, 
+and is wrapped around the whole page content, except for the footer in this example -->
+<div class="w3-content" style="max-width:1400px">
+
+<!-- Header -->
+<header class="w3-container w3-center w3-padding-32"> 
+  <h1><b>Jura</b></h1>
+  <p>Hier stelle ich meine juristischen Ausarbeitungen zur Verfügung <br> Ich freue mich über Anmerkungen und Kritik</p>
+</header>
+
+<!-- Grid -->
+<div class="w3-row">
+
+<!-- Blog entries -->
+<div>
+
+  <?php
+  echo "test"
+  ?>
+
+  <!-- Blog entry -->
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Übersicht Spezielle Grundrechtslehren</b></h3>
+      <h5><span class="w3-opacity">29. Januar 2023</span></h5>
+    </div>
+
+    <div class="w3-container">
+        <div class="w3-row">
+          <div class="w3-col m6 w3-center w3-padding-large">           
+            <img src="static/assets/Vorschau_Grundrechte.jpg" class="w3-round w3-image" alt="Photo of Me" width="500" height="333">
+          </div>
+          <div class="w3-col m6 w3-padding-large">
+            <p>Kompakte Übersicht zu Schutzbereichen, Schranken und Einzelfragen <br> Basierend auf dem Lehrbuch von Prof. Dr. Winfried Kluth</p>
+          </div>
+        </div>
+        <p><button class="w3-button w3-padding-large w3-white w3-border w3-hover-cyan" onclick="window.open('static/Dokumente/Besondere-Grundrechtslehren.pdf');"><b>Download</b></button></p>
+      </div>
+    </div>
+  </div>
+  <hr>
+    
+
+  <!-- Blog entry -->
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Übersicht Strafrecht</b></h3>
+      <h5><span class="w3-opacity">15. Januar 2023</span></h5>
+    </div>
+
+    <div class="w3-container">
+        <div class="w3-row">
+          <div class="w3-col m6 w3-center w3-padding-large">           
+            <img src="static/assets/Vorschau_StrafR.jpg" class="w3-round w3-image" alt="Photo of Me" width="500" height="333">
+          </div>
+          <div class="w3-col m6 w3-padding-large">
+            <p>Übersicht über die wichtigsten Probleme und Meinungsstreits im Strafrecht</p>
+          </div>
+        </div>
+        <p><button class="w3-button w3-padding-large w3-white w3-border w3-hover-cyan" onclick="window.open('static/Dokumente/Uebersicht-StrafR.pdf');"><b>Download</b></button></p>
+      </div>
+    </div>
+  </div>
+  <hr>
+  
+  
+  <!-- Blog entry -->
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Grundrechte und deren Konflikte</b></h3>
+      <h5><span class="w3-opacity">10. Oktober 2022</span></h5>
+    </div>
+
+    <div class="w3-container">
+        <div class="w3-row">
+          <div class="w3-col m6 w3-center w3-padding-large">           
+            <img src="static/assets/Vorschau_GrundrechteVortrag.jpg" class="w3-round w3-image" alt="Photo of Me" width="500" height="333">
+          </div>
+          <div class="w3-col m6 w3-padding-large">
+            <p>Einführender Vortrag im Rahmen des Politikunterrichts Klasse 11</p>
+          </div>
+        </div>
+        <p><button class="w3-button w3-padding-large w3-white w3-border w3-hover-cyan" onclick="window.open('static/Dokumente/Vortrag-Grundrechte.pdf');"><b>Download</b></button></p>
+      </div>
+    </div>
+  </div>
+  <hr>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Streit über die Lufthoheit in den Schulen</b></h3>
+      <h5><span class="w3-opacity">28. März 2022</span></h5>
+    </div>
+
+    <div class="w3-container">
+        <div class="w3-row">
+          <div class="w3-col m6 w3-padding-large">
+            <p>Hausarbeit im öffentlichen Recht, Sommersemester 2022 <br> Note: 16 Punkte</p>
+          </div>
+        </div>
+        <p><button class="w3-button w3-padding-large w3-white w3-border w3-hover-cyan" onclick="window.open('static/Dokumente/Hausarbeit-OeffR-SS22.pdf');"><b>Download</b></button></p>
+      </div>
+    </div>
+  </div>
+  <hr>
+  
+
+
+<!-- END BLOG ENTRIES -->
+</div>
+
+
+
+<!-- END GRID -->
+</div><br>
+
+<!-- END w3-content -->
+</div>
+
+
+
+</body>
+</html>
